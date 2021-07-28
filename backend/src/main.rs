@@ -1,8 +1,10 @@
-use crate::gql::{build_schema, graphiql, graphql};
-
 mod dbs;
 mod gql;
 mod users;
+mod util;
+
+use crate::gql::{build_schema, graphiql, graphql};
+use crate::util::constant::CONFIG;
 
 #[async_std::main]
 async fn main() -> Result<(), std::io::Error> {
@@ -12,10 +14,15 @@ async fn main() -> Result<(), std::io::Error> {
     let state = State { schema: schema };
     let mut app = tide::with_state(state);
 
-    app.at("graphql").post(graphql);
-    app.at("graphiql").get(graphiql);
+    app.at(CONFIG.get("GRAPHQL_PATH").unwrap()).post(graphql);
+    app.at(CONFIG.get("GRAPHIQL_PATH").unwrap()).get(graphiql);
 
-    app.listen(format!("{}:{}", "127.0.0.1", "8080")).await?;
+    app.listen(format!(
+        "{}:{}",
+        CONFIG.get("ADDRESS").unwrap(),
+        CONFIG.get("PORT").unwrap()
+    ))
+    .await?;
 
     Ok(())
 }

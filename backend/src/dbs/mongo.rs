@@ -1,3 +1,4 @@
+use crate::util::constant::CONFIG;
 use mongodb::{options::ClientOptions, Client, Database};
 
 pub struct DataSource {
@@ -12,7 +13,7 @@ impl DataSource {
     }
 
     pub async fn init() -> DataSource {
-        let mut client_options = ClientOptions::parse("mongodb://localhost:27017")
+        let mut client_options = ClientOptions::parse(CONFIG.get("MONGODB_URI").unwrap())
             .await
             .expect("Failed to parse options!");
 
@@ -20,7 +21,7 @@ impl DataSource {
 
         let client = Client::with_options(client_options).expect("Failed to init database!");
 
-        let db = client.database("admin");
+        let db = client.database(CONFIG.get("MONGODB_NAME").unwrap());
 
         DataSource {
             client: client,

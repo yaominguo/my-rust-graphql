@@ -1,4 +1,5 @@
 pub mod queries;
+use crate::util::constant::CONFIG;
 use crate::State;
 use crate::{dbs::mongo, gql::queries::QueryRoot};
 use async_graphql::{
@@ -27,7 +28,9 @@ pub async fn graphql(req: Request<State>) -> tide::Result {
 
 pub async fn graphiql(_: Request<State>) -> tide::Result {
     let mut res = Response::new(StatusCode::Ok);
-    res.set_body(playground_source(GraphQLPlaygroundConfig::new("graphql")));
+    res.set_body(playground_source(GraphQLPlaygroundConfig::new(
+        CONFIG.get("GRAPHQL_PATH").unwrap(),
+    )));
     res.set_content_type(mime::HTML);
 
     Ok(res.into())

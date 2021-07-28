@@ -1,3 +1,4 @@
+use crate::util::constant::CONFIG;
 use async_graphql::{Error, ErrorExtensions};
 use futures::StreamExt;
 use mongodb::Database;
@@ -5,7 +6,7 @@ use mongodb::Database;
 use super::models::User;
 
 pub async fn all_users(db: Database) -> std::result::Result<Vec<User>, async_graphql::Error> {
-    let coll = db.collection("users");
+    let coll = db.collection(CONFIG.get("MONGODB_USERS").unwrap());
     let mut users: Vec<User> = vec![];
     let mut cursor = coll.find(None, None).await.unwrap();
 
