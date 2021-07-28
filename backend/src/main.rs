@@ -1,6 +1,8 @@
 use crate::gql::{build_schema, graphiql, graphql};
 
+mod dbs;
 mod gql;
+mod users;
 
 #[async_std::main]
 async fn main() -> Result<(), std::io::Error> {
