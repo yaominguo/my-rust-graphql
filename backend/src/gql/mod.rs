@@ -1,17 +1,22 @@
+pub mod mutations;
 pub mod queries;
+
 use crate::util::constant::CONFIG;
 use crate::State;
-use crate::{dbs::mongo, gql::queries::QueryRoot};
+use crate::{
+    dbs::mongo,
+    gql::{mutations::MutationRoot, queries::QueryRoot},
+};
 use async_graphql::{
     http::{playground_source, receive_json, GraphQLPlaygroundConfig},
-    EmptyMutation, EmptySubscription, Schema,
+    EmptySubscription, Schema,
 };
 use tide::{http::mime, Body, Request, Response, StatusCode};
 
-pub async fn build_schema() -> Schema<QueryRoot, EmptyMutation, EmptySubscription> {
+pub async fn build_schema() -> Schema<QueryRoot, MutationRoot, EmptySubscription> {
     let mongo_ds = mongo::DataSource::init().await;
 
-    Schema::build(QueryRoot, EmptyMutation, EmptySubscription)
+    Schema::build(QueryRoot, MutationRoot, EmptySubscription)
         .data(mongo_ds)
         .finish()
 }

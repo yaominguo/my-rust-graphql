@@ -17,4 +17,9 @@ impl QueryRoot {
         let db = ctx.data_unchecked::<DataSource>().db.clone();
         users::services::all_users(db).await
     }
+
+    async fn get_user_by_email(&self, ctx: &Context<'_>, email: String) -> GqlResult<User> {
+        let db = ctx.data_unchecked::<DataSource>().db.clone();
+        users::services::get_user_by_email(db, &email).await
+    }
 }

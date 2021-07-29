@@ -31,7 +31,7 @@ async fn main() -> Result<(), std::io::Error> {
 pub struct State {
     pub schema: async_graphql::Schema<
         gql::queries::QueryRoot,
-        async_graphql::EmptyMutation,
+        gql::mutations::MutationRoot,
         async_graphql::EmptySubscription,
     >,
 }
